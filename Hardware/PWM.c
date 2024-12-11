@@ -59,7 +59,7 @@ void PWM_Init_Motor()
 
 	// 配置电机方向控制引脚为推挽输出
 	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
 	// 配置 PB1, PB0, PA7, PA6
@@ -68,15 +68,15 @@ void PWM_Init_Motor()
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_6;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	// 配置 TIM3 的 PWM 输出引脚
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // TIM3_CH1 和 TIM3_CH2
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	// // 配置 TIM3 的 PWM 输出引脚
+	// GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	// GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // TIM3_CH1 和 TIM3_CH2
+	// GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	// 配置 TIM3 定时器
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 999;	  // PWM 周期 (10kHz)
-	TIM_TimeBaseStructure.TIM_Prescaler = 71; // 预分频器 72MHz/72 = 1MHz
+	TIM_TimeBaseStructure.TIM_Period = 1000 - 1;  // PWM 周期 (10kHz)
+	TIM_TimeBaseStructure.TIM_Prescaler = 36 - 1; // 预分频器 72MHz/72 = 1MHz
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
@@ -127,17 +127,17 @@ void PWM_SetCompare_Servo(uint16_t Compare)
 
 void PWM_SetCompare3(uint16_t Compare)
 {
-	TIM_SetCompare3(TIM2, Compare);
+	TIM_SetCompare3(TIM3, Compare);
 }
 void PWM_SetCompare4(uint16_t Compare)
 {
-	TIM_SetCompare4(TIM2, Compare);
+	TIM_SetCompare4(TIM3, Compare);
 }
 void PWM_SetCompare1(uint16_t Compare)
 {
-	TIM_SetCompare1(TIM2, Compare);
+	TIM_SetCompare1(TIM3, Compare);
 }
 void PWM_SetCompare2(uint16_t Compare)
 {
-	TIM_SetCompare2(TIM2, Compare);
+	TIM_SetCompare2(TIM3, Compare);
 }

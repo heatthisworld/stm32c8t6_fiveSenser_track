@@ -27,7 +27,6 @@ int main(void)
 	OLED_ShowString(1, 1, "Pos:");
 	Servo_SetAngle(0);
 
-	
 	Servo_SetAngle(50);
 
 	while (1)
@@ -51,9 +50,17 @@ int main(void)
 		}
 		else if (key == 3)
 		{
+			speed += SPEED_INCREMENT;
+			Motor_LeftSetSpeed(speed);
+			Motor_RightSetSpeed(speed);
+			OLED_ShowNum(3, 1, speed, 3);
 		}
 		else if (key == 4)
 		{
+			speed -= SPEED_INCREMENT;
+			Motor_LeftSetSpeed(speed);
+			Motor_RightSetSpeed(speed);
+			OLED_ShowNum(3, 1, speed, 3);
 		}
 		else
 		{
