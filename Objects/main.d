@@ -34,3 +34,7 @@
 .\objects\main.o: .\Hardware\mySensor.h
 .\objects\main.o: .\Hardware\Key.h
 .\objects\main.o: .\Hardware\Motor.h
+.\objects\main.o: .\Hardware\MPU6050.h
+.\objects\main.o: E:\tools\toolssoft\stm32_soft\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: .\System\Timer.h
+.\objects\main.o: .\System\attitude_solution.h

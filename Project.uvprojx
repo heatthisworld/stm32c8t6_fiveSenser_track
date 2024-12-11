@@ -660,6 +660,26 @@
               <FileType>5</FileType>
               <FilePath>.\System\Delay.h</FilePath>
             </File>
+            <File>
+              <FileName>attitude_solution.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\attitude_solution.c</FilePath>
+            </File>
+            <File>
+              <FileName>attitude_solution.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\attitude_solution.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\Timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\Timer.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -759,6 +779,21 @@
               <FileName>Moter_Simple.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\Moter_Simple.h</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MPU6050.h</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050_Reg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MPU6050_Reg.h</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\MPU6050.c</FilePath>
             </File>
           </Files>
         </Group>

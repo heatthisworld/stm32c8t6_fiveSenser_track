@@ -18,8 +18,8 @@ void Servo_Init(void)
  */
 void Servo_SetAngle(float Angle)
 {
-  if (Angle < 0)
-    Angle = 0;
+  if (Angle < 10)
+    Angle = 10;
   if (Angle > 100)
     Angle = 100;
   PWM_SetCompare_Servo(Angle / 180 * 2000 + 500); // 设置占空比
