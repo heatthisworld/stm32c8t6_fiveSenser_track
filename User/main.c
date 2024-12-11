@@ -31,58 +31,51 @@ int main(void)
 	// Moter_Simple_Init(); // 简单电机初始化
 	Motor_Init();
 	MPU6050_Init(); // MPU6050初始化 	注意将IIC速率改高一点 200khz可以实现
+	Timer_Init();
 
 	/*OLED显示*/
 	OLED_ShowString(1, 1, "Pos:");
-	Servo_SetAngle(0);
-
 	Servo_SetAngle(50);
-
-	ID = MPU6050_GetID();						   // 获取MPU6050的ID号
-	MPU6050_GetData(&AX, &AY, &AZ, &GX, &GY, &GZ); // 获取MPU6050的数据
 
 	while (1)
 	{
-		MPU6050_GetData(&AX, &AY, &AZ, &GX, &GY, &GZ); // 获取MPU6050的数据
 		sprintf(str, "yaw:%.2f", eulerAngle.yaw);
 		OLED_ShowString(4, 1, str);
 		uint8_t key = Key_GetNum();
 		if (key == 1)
 		{
-			if (Angle < 180)
-			{
-				Angle += 10;
-				Servo_SetAngle(Angle);
-			}
-		}
-		else if (key == 2)
-		{
-			if (Angle > 0)
-			{
-				Angle -= 10;
-				Servo_SetAngle(Angle);
-			}
-		}
-		else if (key == 3)
-		{
 			speed += SPEED_INCREMENT;
 			Motor_LeftSetSpeed(speed);
 			Motor_RightSetSpeed(speed);
-			OLED_ShowNum(3, 1, speed, 3);
+			OLED_ShowString(1, 1, "Speed:");
+			OLED_ShowNum(1, 7, speed, 3);
+			OLED_ShowString(3, 1, "Key:");
 		}
-		else if (key == 4)
+		else if (key == 2)
 		{
 			speed -= SPEED_INCREMENT;
 			Motor_LeftSetSpeed(speed);
 			Motor_RightSetSpeed(speed);
-			OLED_ShowNum(3, 1, speed, 3);
+			OLED_ShowString(1, 1, "Speed:");
+			OLED_ShowNum(1, 7, speed, 3);
+		}
+		else if (key == 3)
+		{
+			Angle -= 10;
+			Servo_SetAngle(Angle);
+			OLED_ShowString(3, 1, "Angle:");
+			OLED_ShowNum(3, 7, Angle, 3);
+		}
+		else if (key == 4)
+		{
+			Angle += 10;
+			Servo_SetAngle(Angle);
+			OLED_ShowString(3, 1, "Angle:");
+			OLED_ShowNum(3, 7, Angle, 3);
 		}
 		else
 		{
 		}
-		OLED_ShowNum(2, 1, Angle, 3);
-		int16_t pos = mySensor_Read();
-		OLED_ShowNum(1, 5, pos, 3);
 	}
 }
 // 定时器中断函数，可以复制到使用它的地方
