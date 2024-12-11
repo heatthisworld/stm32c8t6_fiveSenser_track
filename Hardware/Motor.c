@@ -46,8 +46,8 @@ void Motor_RightSetSpeed(int16_t Speed)
 	}
 	else
 	{
-		GPIO_SetBits(GPIOB, GPIO_Pin_6);
-		GPIO_ResetBits(GPIOB, GPIO_Pin_7);
+		GPIO_SetBits(GPIOA, GPIO_Pin_6);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 		PWM_SetCompare4(-Speed * 0.93);
 	}
 }

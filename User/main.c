@@ -27,38 +27,38 @@ int main(void)
 	OLED_ShowString(1, 1, "Pos:");
 	Servo_SetAngle(0);
 
+	
+	Servo_SetAngle(50);
+
 	while (1)
 	{
 		uint8_t key = Key_GetNum();
 		if (key == 1)
 		{
-			speed += SPEED_INCREMENT;
-			Motor_LeftSetSpeed(speed);
-			// Moter_Simple_Forward();
-			OLED_ShowNum(3, 1, speed, 3);
+			if (Angle < 180)
+			{
+				Angle += 10;
+				Servo_SetAngle(Angle);
+			}
 		}
 		else if (key == 2)
 		{
-			speed -= SPEED_INCREMENT;
-			Motor_LeftSetSpeed(speed--);
-			// Moter_Simple_Backward();
-			OLED_ShowNum(3, 1, speed, 3);
+			if (Angle > 0)
+			{
+				Angle -= 10;
+				Servo_SetAngle(Angle);
+			}
 		}
 		else if (key == 3)
 		{
-			speed += SPEED_INCREMENT;
-			Motor_RightSetSpeed(speed++);
-			OLED_ShowNum(3, 1, speed, 3);
 		}
 		else if (key == 4)
 		{
-			speed -= SPEED_INCREMENT;
-			Motor_RightSetSpeed(speed--);
-			OLED_ShowNum(3, 1, speed, 3);
 		}
 		else
 		{
 		}
+		OLED_ShowNum(2, 1, Angle, 3);
 		int16_t pos = mySensor_Read();
 		OLED_ShowNum(1, 5, pos, 3);
 	}
