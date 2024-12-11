@@ -680,6 +680,16 @@
               <FileType>5</FileType>
               <FilePath>.\System\Timer.h</FilePath>
             </File>
+            <File>
+              <FileName>Track.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\Track.c</FilePath>
+            </File>
+            <File>
+              <FileName>Track.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\Track.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

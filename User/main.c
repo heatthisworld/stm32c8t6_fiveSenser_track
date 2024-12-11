@@ -9,6 +9,7 @@
 #include "stdio.h"
 #include "Timer.h"
 #include "attitude_solution.h"
+#include "Track.h"
 
 // 调试时每次电机速度增量
 #define SPEED_INCREMENT 100
@@ -32,50 +33,15 @@ int main(void)
 	Motor_Init();
 	MPU6050_Init(); // MPU6050初始化 	注意将IIC速率改高一点 200khz可以实现
 	Timer_Init();
+	LineTracking_Init();
 
 	/*OLED显示*/
-	OLED_ShowString(1, 1, "Pos:");
+	// OLED_ShowString(3, 1, "Pos:");
 	Servo_SetAngle(50);
 
 	while (1)
 	{
-		sprintf(str, "yaw:%.2f", eulerAngle.yaw);
-		OLED_ShowString(4, 1, str);
-		uint8_t key = Key_GetNum();
-		if (key == 1)
-		{
-			speed += SPEED_INCREMENT;
-			Motor_LeftSetSpeed(speed);
-			Motor_RightSetSpeed(speed);
-			OLED_ShowString(1, 1, "Speed:");
-			OLED_ShowNum(1, 7, speed, 3);
-			OLED_ShowString(3, 1, "Key:");
-		}
-		else if (key == 2)
-		{
-			speed -= SPEED_INCREMENT;
-			Motor_LeftSetSpeed(speed);
-			Motor_RightSetSpeed(speed);
-			OLED_ShowString(1, 1, "Speed:");
-			OLED_ShowNum(1, 7, speed, 3);
-		}
-		else if (key == 3)
-		{
-			Angle -= 10;
-			Servo_SetAngle(Angle);
-			OLED_ShowString(3, 1, "Angle:");
-			OLED_ShowNum(3, 7, Angle, 3);
-		}
-		else if (key == 4)
-		{
-			Angle += 10;
-			Servo_SetAngle(Angle);
-			OLED_ShowString(3, 1, "Angle:");
-			OLED_ShowNum(3, 7, Angle, 3);
-		}
-		else
-		{
-		}
+		LineTracking_Update();
 	}
 }
 // 定时器中断函数，可以复制到使用它的地方

@@ -3,6 +3,7 @@
         "mysensor.h": "c",
         "stm32f10x.h": "c",
         "moter_simple.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "motor.h": "c"
     }
 }

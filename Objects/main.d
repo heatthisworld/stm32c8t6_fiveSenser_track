@@ -38,3 +38,4 @@
 .\objects\main.o: E:\tools\toolssoft\stm32_soft\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\main.o: .\System\Timer.h
 .\objects\main.o: .\System\attitude_solution.h
+.\objects\main.o: .\System\Track.h

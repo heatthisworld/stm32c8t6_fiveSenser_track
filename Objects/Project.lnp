@@ -28,6 +28,7 @@
 ".\objects\delay.o"
 ".\objects\attitude_solution.o"
 ".\objects\timer.o"
+".\objects\track.o"
 ".\objects\led.o"
 ".\objects\key.o"
 ".\objects\oled.o"
