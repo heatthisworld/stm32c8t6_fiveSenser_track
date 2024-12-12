@@ -9,5 +9,6 @@ void Motor_Init(void);
 // 电机控制功能
 void Motor_RightSetSpeed(int16_t Speed);
 void Motor_LeftSetSpeed(int16_t Speed);
+void Motor_SetSpeed(int16_t LeftSpeed, int16_t RightSpeed);
 
 #endif

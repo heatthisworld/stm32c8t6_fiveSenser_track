@@ -4,6 +4,7 @@
         "stm32f10x.h": "c",
         "moter_simple.h": "c",
         "timer.h": "c",
-        "motor.h": "c"
+        "motor.h": "c",
+        "key.h": "c"
     }
 }

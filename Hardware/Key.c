@@ -80,7 +80,8 @@ uint8_t Key_GetNum_Advance()
 		Delay_ms(20); // 延时消抖
 		while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) == 0)
 		{
-			KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
+			if (KeyNum < !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8)
+				KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
 		}
 		Delay_ms(20); // 延时消抖
 		return KeyNum;
@@ -91,7 +92,8 @@ uint8_t Key_GetNum_Advance()
 		Delay_ms(20); // 延时消抖
 		while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) == 0)
 		{
-			KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
+			if (KeyNum < !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8)
+				KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
 		}
 		Delay_ms(20); // 延时消抖
 		return KeyNum;
@@ -102,7 +104,8 @@ uint8_t Key_GetNum_Advance()
 		Delay_ms(20); // 延时消抖
 		while (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) == 0)
 		{
-			KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
+			if (KeyNum < !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8)
+				KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
 		}
 
 		Delay_ms(20); // 延时消抖
@@ -114,11 +117,13 @@ uint8_t Key_GetNum_Advance()
 		Delay_ms(20); // 延时消抖
 		while (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) == 0)
 		{
-			KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
+			if (KeyNum < !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8)
+				KeyNum = !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) + !GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) * 2 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_14) * 4 + !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15) * 8;
 		} // 等待按键松手
 		Delay_ms(20); // 延时消抖
 		return KeyNum;
 	}
+	return KeyNum;
 }
 uint8_t Key_GetNum_gpt(void)
 {

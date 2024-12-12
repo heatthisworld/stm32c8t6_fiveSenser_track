@@ -1,5 +1,5 @@
 .\objects\track.o: System\Track.c
-.\objects\track.o: System\track.h
+.\objects\track.o: System\Track.h
 .\objects\track.o: .\Start\stm32f10x.h
 .\objects\track.o: .\Start\core_cm3.h
 .\objects\track.o: E:\tools\toolssoft\stm32_soft\ARM\ARMCC\Bin\..\include\stdint.h

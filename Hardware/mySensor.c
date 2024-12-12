@@ -29,10 +29,10 @@ void mySensor_Init(void)
 uint8_t mySensor_Read(void)
 {
     uint16_t value = 0;
-    value |= GPIO_ReadInputDataBit(GPIOB, IR_SENSOR1_PIN) << 0;
-    value |= GPIO_ReadInputDataBit(GPIOB, IR_SENSOR2_PIN) << 1;
-    value |= GPIO_ReadInputDataBit(GPIOB, IR_SENSOR3_PIN) << 2;
-    value |= GPIO_ReadInputDataBit(GPIOB, IR_SENSOR4_PIN) << 3;
-    value |= GPIO_ReadInputDataBit(GPIOA, IR_SENSOR5_PIN) << 4;
+    value |= !GPIO_ReadInputDataBit(GPIOB, IR_SENSOR1_PIN) << 0;
+    value |= !GPIO_ReadInputDataBit(GPIOB, IR_SENSOR2_PIN) << 1;
+    value |= !GPIO_ReadInputDataBit(GPIOB, IR_SENSOR3_PIN) << 2;
+    value |= !GPIO_ReadInputDataBit(GPIOB, IR_SENSOR4_PIN) << 3;
+    value |= !GPIO_ReadInputDataBit(GPIOA, IR_SENSOR5_PIN) << 4;
     return value;
 }

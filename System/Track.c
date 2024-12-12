@@ -1,5 +1,13 @@
 #include "Track.h"
 
+float Kp = 50.0f;
+float Ki = 0.0f;
+float Kd = 1.0f;
+int16_t baseSpeed = 300; // 基础车速
+float steerStep = 1.0f;  // 作举调整步长
+float lastError = 0.0f;
+float integral = 0.0f;
+
 void Track_Init(void)
 {
     Motor_Init();
@@ -17,7 +25,7 @@ void Track_Run(void)
     // 根据传感器值计算误差
     switch (sensorValue)
     {
-    case 0b00000: // 无黑线身
+    case 0: // 无黑线身
         noLineCounter++;
         if (noLineCounter < 10)
         {
@@ -25,23 +33,24 @@ void Track_Run(void)
         }
         else
         {
-            Motor_SetSpeed(0, 0); // 停止
+            Motor_LeftSetSpeed(0);
+            Motor_RightSetSpeed(0);
             return;
         }
         break;
-    case 0b00001:
+    case 1:
         error = 2.0f;
         break;
-    case 0b00010:
+    case 2:
         error = 1.0f;
         break;
-    case 0b00100:
+    case 4:
         error = 0.0f;
         break;
-    case 0b01000:
+    case 8:
         error = -1.0f;
         break;
-    case 0b10000:
+    case 16:
         error = -2.0f;
         break;
     default: // 多个传感器意义同时跨黑线
@@ -66,8 +75,8 @@ void Track_Run(void)
     Servo_SetAngle(steerAngle);
 
     // 调整车速
-    int16_t leftSpeed = baseSpeed - pidOutput;
-    int16_t rightSpeed = baseSpeed + pidOutput;
+    int16_t leftSpeed = baseSpeed + pidOutput;
+    int16_t rightSpeed = baseSpeed - pidOutput;
 
     if (leftSpeed < 300)
         leftSpeed = 300;
