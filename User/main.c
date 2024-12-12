@@ -42,6 +42,22 @@ int main(void)
 	while (1)
 	{
 		LineTracking_Update();
+		uint8_t key = Key_GetNum();
+		if (key == 1)
+		{
+		}
+		else if (key == 2)
+		{
+		}
+		else if (key == 3)
+		{
+		}
+		else if (key == 4)
+		{
+		}
+		else
+		{
+		}
 	}
 }
 // 定时器中断函数，可以复制到使用它的地方

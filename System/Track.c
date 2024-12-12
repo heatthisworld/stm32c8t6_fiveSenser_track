@@ -1,100 +1,85 @@
-#include "track.h"
-#include "Motor.h"
-#include "Servo.h"
-#include "mySensor.h"
-#include "attitude_solution.h" // 引入偏航角计算相关头文件
-// PID 参数
-static float Kp = 10.0f; // 比例系数
-static float Ki = 0.0f;  // 积分系数
-static float Kd = 1.0f;  // 微分系数
+#include "Track.h"
 
-// PID 控制变量
-static float previousError = 0.0f;
-static float integral = 0.0f;
-
-// 电机速度范围
-static const int16_t minSpeed = 300;  // 电机最小速度
-static const int16_t maxSpeed = 1000; // 电机最大速度
-
-// 舵机角度范围
-static const float servoCenter = 50.0f; // 舵机中间角度
-static const float servoRange = 40.0f;  // 舵机最大偏转范围
-
-// 传感器权值数组
-static const int8_t sensorWeights[5] = {-2, -1, 0, 1, 2};
-
-// 初始化函数
-void LineTracking_Init(void)
+void Track_Init(void)
 {
-    Motor_LeftSetSpeed(minSpeed);
-    Motor_RightSetSpeed(minSpeed);
+    Motor_Init();
+    Servo_Init();
+    mySensor_Init();
 }
 
-// 读取传感器值并计算误差
-float CalculateSensorError(uint8_t sensorData)
+void Track_Run(void)
 {
-    int8_t weightedSum = 0;
-    int8_t activeSensors = 0;
-
-    for (int i = 0; i < 5; i++)
-    {
-        if (!(sensorData & (1 << i))) // 检测第 i 位是否为低电平（在黑线上）
-        {
-            weightedSum += sensorWeights[i];
-            activeSensors++;
-        }
-    }
-
-    // 如果没有检测到黑线，返回一个特殊值（如 -999）表示失控状态
-    if (activeSensors == 0)
-        return -999;
-
-    return (float)weightedSum / activeSensors;
-}
-
-// 黑线跟踪主控制函数
-void LineTracking_Update(void)
-{
-    // 读取传感器数据
-    uint8_t sensorData = mySensor_Read();
-
-    // 计算传感器误差
-    float sensorError = CalculateSensorError(sensorData);
-
+    uint8_t sensorValue = mySensor_Read();
     float error = 0.0f;
+    static int noLineCounter = 0;
+    float steerAngle;
 
-    // 如果传感器没有检测到黑线，使用偏航角作为补偿
-    if (sensorError == -999)
+    // 根据传感器值计算误差
+    switch (sensorValue)
     {
-        error = -eulerAngle.yaw; // 偏航角为负值表示左偏，为正值表示右偏
+    case 0b00000: // 无黑线身
+        noLineCounter++;
+        if (noLineCounter < 10)
+        {
+            error = lastError; // 继续保持原路径
+        }
+        else
+        {
+            Motor_SetSpeed(0, 0); // 停止
+            return;
+        }
+        break;
+    case 0b00001:
+        error = 2.0f;
+        break;
+    case 0b00010:
+        error = 1.0f;
+        break;
+    case 0b00100:
+        error = 0.0f;
+        break;
+    case 0b01000:
+        error = -1.0f;
+        break;
+    case 0b10000:
+        error = -2.0f;
+        break;
+    default: // 多个传感器意义同时跨黑线
+        error = 0.0f;
+        break;
     }
-    else
-    {
-        error = sensorError; // 正常情况下使用传感器误差
-    }
+
+    noLineCounter = 0; // 重置无黑线计数
 
     // PID 计算
-    integral += error;                        // 积分累加
-    float derivative = error - previousError; // 微分
-    float correction = Kp * error + Ki * integral + Kd * derivative;
-    previousError = error;
+    integral += error;
+    float derivative = error - lastError;
+    float pidOutput = Kp * error + Ki * integral + Kd * derivative;
 
-    // 计算舵机角度
-    float servoAngle = servoCenter + correction;
+    // 调整旋转角
+    steerAngle = 50.0f + pidOutput * steerStep;
+    if (steerAngle < 10.0f)
+        steerAngle = 10.0f;
+    if (steerAngle > 90.0f)
+        steerAngle = 90.0f;
 
-    // 限幅处理（舵机范围：50 ± 40）
-    if (servoAngle > servoCenter + servoRange)
-        servoAngle = servoCenter + servoRange;
-    if (servoAngle < servoCenter - servoRange)
-        servoAngle = servoCenter - servoRange;
+    Servo_SetAngle(steerAngle);
 
-    // 设置舵机角度
-    Servo_SetAngle(servoAngle);
+    // 调整车速
+    int16_t leftSpeed = baseSpeed - pidOutput;
+    int16_t rightSpeed = baseSpeed + pidOutput;
 
-    // 电机速度调整（保持恒定速度）
-    int16_t motorSpeed = (maxSpeed + minSpeed) / 2;
+    if (leftSpeed < 300)
+        leftSpeed = 300;
+    if (leftSpeed > 1000)
+        leftSpeed = 1000;
+    if (rightSpeed < 300)
+        rightSpeed = 300;
+    if (rightSpeed > 1000)
+        rightSpeed = 1000;
 
-    // 设置电机速度
-    Motor_LeftSetSpeed(motorSpeed);
-    Motor_RightSetSpeed(motorSpeed);
+    Motor_LeftSetSpeed(leftSpeed);
+    Motor_RightSetSpeed(rightSpeed);
+
+    lastError = error; // 更新上一次误差
 }
