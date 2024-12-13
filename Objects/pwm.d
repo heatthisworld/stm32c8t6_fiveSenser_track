@@ -29,3 +29,4 @@
 .\objects\pwm.o: .\Library\stm32f10x_wwdg.h
 .\objects\pwm.o: .\Library\misc.h
 .\objects\pwm.o: Hardware\OLED.h
+.\objects\pwm.o: Hardware\PWM.h

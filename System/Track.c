@@ -3,7 +3,6 @@
 #define MAX_SPEED 1000
 #define MIN_SPEED 300
 #define integralLimit 50.0f
-#define Delay delay_ms(10)
 
 float Kp = 12.0f;
 float Ki = 0.01f;

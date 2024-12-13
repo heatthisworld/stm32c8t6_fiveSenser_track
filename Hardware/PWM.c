@@ -1,5 +1,6 @@
 #include "stm32f10x.h" // Device header
 #include "OLED.h"
+#include "PWM.h"
 
 /**
  * 函    数：PWM初始化
@@ -56,6 +57,7 @@ void PWM_Init_Motor()
 	// 启用 GPIO 和 TIM3 的时钟
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOA, ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
 	// 配置电机方向控制引脚为推挽输出
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -63,9 +65,9 @@ void PWM_Init_Motor()
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
 	// 配置 PB1, PB0, PA7, PA6
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_0;
+	GPIO_InitStructure.GPIO_Pin = PWMB_OUT1 | PWMB_OUT2;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_6;
+	GPIO_InitStructure.GPIO_Pin = PWMA_OUT3 | PWMA_OUT4;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	// // 配置 TIM3 的 PWM 输出引脚
@@ -86,14 +88,17 @@ void PWM_Init_Motor()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; // PWM 模式 1
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 0;		 // 默认占空比为 0
-	TIM_OC1Init(TIM3, &TIM_OCInitStructure); // TIM3_CH1
-	TIM_OC2Init(TIM3, &TIM_OCInitStructure); // TIM3_CH2
+	TIM_OCInitStructure.TIM_Pulse = 0; // 默认占空比为 0
+	// TIM_OC1Init(TIM3, &TIM_OCInitStructure); // TIM3_CH1
+	// TIM_OC2Init(TIM3, &TIM_OCInitStructure); // TIM3_CH2
+	TIM_OC3Init(TIM2, &TIM_OCInitStructure); // TIM2_CH3
+	TIM_OC4Init(TIM2, &TIM_OCInitStructure); // TIM2_CH4
 	TIM_OC3Init(TIM3, &TIM_OCInitStructure); // TIM3_CH3
 	TIM_OC4Init(TIM3, &TIM_OCInitStructure); // TIM3_CH4
 
 	// 启动 TIM3
 	TIM_Cmd(TIM3, ENABLE);
+	TIM_Cmd(TIM2, ENABLE);
 }
 
 /**
@@ -133,11 +138,12 @@ void PWM_SetCompare4(uint16_t Compare)
 {
 	TIM_SetCompare4(TIM3, Compare);
 }
+// 注意这里引脚改变了,从原来的PA6,7改为PA2,3,服了队友了
 void PWM_SetCompare1(uint16_t Compare)
 {
-	TIM_SetCompare1(TIM3, Compare);
+	TIM_SetCompare3(TIM2, Compare);
 }
 void PWM_SetCompare2(uint16_t Compare)
 {
-	TIM_SetCompare2(TIM3, Compare);
+	TIM_SetCompare4(TIM2, Compare);
 }

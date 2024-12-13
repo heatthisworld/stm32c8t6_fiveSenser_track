@@ -9,6 +9,8 @@
 #include "OLED.h"
 #include "Delay.h"
 
+#define Delay Delay_ms(10)
+
 extern float Kp;
 extern float Ki;
 extern float Kd;
