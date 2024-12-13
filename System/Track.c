@@ -1,18 +1,35 @@
 #include "Track.h"
 
-float Kp = 50.0f;
-float Ki = 0.0f;
-float Kd = 1.0f;
-int16_t baseSpeed = 300; // 基础车速
-float steerStep = 1.0f;  // 作举调整步长
+float Kp = 12.0f;
+float Ki = 0.01f;
+float Kd = 2.0f;
+int16_t baseSpeed = 350; // 基础车速
+float steerStep = 0.8f;  // 作举调整步长
 float lastError = 0.0f;
-float integral = 0.0f;
+float integral = 0.1f;
+const float integralLimit = 50.0f; // 积分限制
 
 void Track_Init(void)
 {
     Motor_Init();
     Servo_Init();
     mySensor_Init();
+}
+
+int16_t constrain(int16_t value, int16_t min, int16_t max)
+{
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    else
+    {
+        return value;
+    }
 }
 
 void Track_Run(void)
@@ -33,38 +50,47 @@ void Track_Run(void)
         }
         else
         {
-            Motor_LeftSetSpeed(0);
-            Motor_RightSetSpeed(0);
+            Motor_LeftSetSpeed(300);
+            Motor_RightSetSpeed(300);
             return;
         }
         break;
     case 1:
-        error = 2.0f;
+        error = 6.0f;
         break;
     case 2:
-        error = 1.0f;
+        error = 2.3f;
         break;
     case 4:
-        error = 0.0f;
+        error = 0;
+
         break;
     case 8:
-        error = -1.0f;
+        error = -2.3f;
         break;
     case 16:
-        error = -2.0f;
+        error = -6.0f;
         break;
     default: // 多个传感器意义同时跨黑线
         error = 0.0f;
         break;
     }
-
+    // if (error != 0.0f)
+    // {
+    //     OLED_ShowString(1, 1, "err:");
+    //     OLED_ShowSignedNum(1, 5, error * 10, 3);
+    // }
     noLineCounter = 0; // 重置无黑线计数
 
     // PID 计算
     integral += error;
+    integral = constrain(integral, -integralLimit, integralLimit); // 添加积分限制
+    // OLED_ShowString(2, 1, "int:");
+    // OLED_ShowSignedNum(2, 5, integral, 4);
     float derivative = error - lastError;
     float pidOutput = Kp * error + Ki * integral + Kd * derivative;
-
+    // OLED_ShowString(3, 1, "out:");
+    // OLED_ShowSignedNum(3, 5, pidOutput * 10, 4);
     // 调整旋转角
     steerAngle = 50.0f + pidOutput * steerStep;
     if (steerAngle < 10.0f)
@@ -73,10 +99,14 @@ void Track_Run(void)
         steerAngle = 90.0f;
 
     Servo_SetAngle(steerAngle);
+    // OLED_ShowString(4, 1, "steer:");
+    // OLED_ShowNum(4, 7, steerAngle, 2);
 
-    // 调整车速
+    // // 调整车速
     int16_t leftSpeed = baseSpeed + pidOutput;
     int16_t rightSpeed = baseSpeed - pidOutput;
+    // int16_t leftSpeed = baseSpeed;
+    // int16_t rightSpeed = baseSpeed;
 
     if (leftSpeed < 300)
         leftSpeed = 300;

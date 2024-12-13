@@ -35,3 +35,4 @@
 .\objects\track.o: System\attitude_solution.h
 .\objects\track.o: .\Hardware\MPU6050.h
 .\objects\track.o: System\Delay.h
+.\objects\track.o: .\Hardware\OLED.h
