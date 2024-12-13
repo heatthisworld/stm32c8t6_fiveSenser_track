@@ -7,6 +7,7 @@
 #include "mySensor.h"
 #include "attitude_solution.h" // 引入偏航角计算相关头文件
 #include "OLED.h"
+#include "Delay.h"
 
 extern float Kp;
 extern float Ki;
